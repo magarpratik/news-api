@@ -1,12 +1,13 @@
 const db = require("../connection");
+const format = require("pg-format");
 
 const seed = (data) => {
   const { articleData, commentData, topicData, userData } = data;
 
   return db
-    .query(`DROP TABLE IF EXISTS comments;`)
+    .query(`DROP TABLE IF EXISTS comments`)
     .then(() => {
-      return db.query(`DROP TABLE IF EXISTS articles;`).then(() => {
+      return db.query(`DROP TABLE IF EXISTS articles`).then(() => {
         return Promise.all([
           db.query(`DROP TABLE IF EXISTS users`),
           db.query(`DROP TABLE IF EXISTS topics`),
@@ -14,6 +15,7 @@ const seed = (data) => {
       });
     })
     .then(() => {
+      // 1. create tables
       return Promise.all([
         db.query(`
         CREATE TABLE topics (
@@ -29,7 +31,7 @@ const seed = (data) => {
       ]);
     })
     .then(() => {
-      db.query(`
+      return db.query(`
       CREATE TABLE articles (
         article_id SERIAL PRIMARY KEY,
         title VARCHAR(255),
@@ -41,7 +43,7 @@ const seed = (data) => {
       )`);
     })
     .then(() => {
-      db.query(`
+      return db.query(`
       CREATE TABLE comments (
         comment_id SERIAL PRIMARY KEY,
         author VARCHAR(255) REFERENCES users(username),
@@ -50,9 +52,58 @@ const seed = (data) => {
         body TEXT,
         created_at TIMESTAMP WITH TIME ZONE DEFAULT CURRENT_TIMESTAMP
       )`);
+    })
+    .then(() => {
+      // 2. insert data
+      const formattedTopics = format(
+        `INSERT INTO topics
+          (slug, description)
+          VALUES
+          %L`,
+        topicData.map((topic) => [topic.slug, topic.description])
+      );
+      const formattedUsers = format(
+        `INSERT INTO users
+          (username, avatar_url, name)
+          VALUES
+          %L`,
+        userData.map((user) => [user.username, user.avatar_url, user.name])
+      );
+      return Promise.all([db.query(formattedTopics), db.query(formattedUsers)]);
+    })
+    .then(() => {
+      const formattedArticles = format(
+        `INSERT INTO articles
+          (title, body, votes, topic, author, created_at)
+          VALUES
+          %L`,
+        articleData.map((article) => [
+          article.title,
+          article.body,
+          article.votes,
+          article.topic,
+          article.author,
+          article.created_at,
+        ])
+      );
+      return db.query(formattedArticles);
+    })
+    .then(() => {
+      const formattedComments = format(
+        `INSERT INTO comments
+          (author, article_id, votes, created_at, body)
+          VALUES
+          %L`,
+        commentData.map((comment) => [
+          comment.author,
+          comment.article_id,
+          comment.votes,
+          comment.created_at,
+          comment.body,
+        ])
+      );
+      return db.query(formattedComments);
     });
-
-  // 2. insert data
 };
 
 module.exports = seed;
