@@ -8,7 +8,7 @@ beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
 describe("GET /api/topics", () => {
-  it("status: 200, return an array of topic objects, each with properties: slug, description", () => {
+  it("status 200: return an array of topic objects, each with properties: slug, description", () => {
     // act
     // arrange
     // assert
@@ -28,7 +28,7 @@ describe("GET /api/topics", () => {
       });
   });
 
-  it("status: 404, path not found for misspelled path", () => {
+  it("status 404: path not found for misspelled path", () => {
     return request(app)
       .get("/api/invalid_path")
       .expect(404)
@@ -39,12 +39,11 @@ describe("GET /api/topics", () => {
 });
 
 describe("GET /api/articles/:article_id", () => {
-  it("status 200, return the specified article object with the appropriate properties", () => {
+  it("status 200: return the specified article object with the appropriate properties", () => {
     return request(app)
       .get("/api/articles/1")
       .expect(200)
-      .then(({ body }) => {
-        const { article } = body;
+      .then(({ body: { article } }) => {
         expect(article).toEqual({
           author: "butter_bridge",
           title: "Living in the shadow of a great man",
@@ -57,4 +56,15 @@ describe("GET /api/articles/:article_id", () => {
         });
       });
   });
+
+  it("status 204: article does not exist in the database", () => {
+    return request(app)
+      .get("/api/articles/9999")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("Article 9999 does not exist");
+      });
+  });
+
+  // it("status 400: handle invalid data type for article_id", () => {});
 });
