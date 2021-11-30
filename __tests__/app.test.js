@@ -57,7 +57,7 @@ describe("GET /api/articles/:article_id", () => {
       });
   });
 
-  it("status 204: article does not exist in the database", () => {
+  it("status 400: article does not exist in the database", () => {
     return request(app)
       .get("/api/articles/9999")
       .expect(400)
@@ -66,5 +66,30 @@ describe("GET /api/articles/:article_id", () => {
       });
   });
 
-  // it("status 400: handle invalid data type for article_id", () => {});
+  it("status 400: handle invalid data type (String) for article_id", () => {
+    return request(app)
+      .get("/api/articles/invalid_id")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("invalid_id is an invalid article ID");
+      });
+  });
+
+  it("status 400: handle invalid data type (Float) for article_id", () => {
+    return request(app)
+      .get("/api/articles/2.5")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("2.5 is an invalid article ID");
+      });
+  });
+
+  it("status 400: handle invalid data type (negative numbers) for article_id", () => {
+    return request(app)
+      .get("/api/articles/-1")
+      .expect(400)
+      .then(({ body }) => {
+        expect(body.msg).toBe("-1 is an invalid article ID");
+      });
+  });
 });
