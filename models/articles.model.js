@@ -1,8 +1,12 @@
 const db = require("../db/connection");
 
 exports.selectArticleById = (article_id) => {
-  // handle invalid inputs such as String
-  if (isNaN(article_id) || Number(article_id) % 1 !== 0 || Number(article_id) < 1) {
+  // handle invalid inputs such as String, Float and negative numbers
+  if (
+    isNaN(article_id) ||
+    Number(article_id) % 1 !== 0 ||
+    Number(article_id) < 1
+  ) {
     return Promise.reject({
       status: 400,
       msg: `${article_id} is an invalid article ID`,
@@ -30,8 +34,8 @@ exports.selectArticleById = (article_id) => {
   ]).then(([article, comment_count]) => {
     if (article.rows.length === 0) {
       return Promise.reject({
-        status: 400,
-        msg: `Article ${article_id} does not exist`,
+        status: 404,
+        msg: `Article ${article_id} not found`,
       });
     }
 
@@ -40,4 +44,39 @@ exports.selectArticleById = (article_id) => {
 
     return article.rows[0];
   });
+};
+
+exports.updateArticleById = (article_id, inc_votes) => {
+  if (
+    isNaN(article_id) ||
+    Number(article_id) % 1 !== 0 ||
+    Number(article_id) < 1
+  ) {
+    return Promise.reject({
+      status: 400,
+      msg: `${article_id} is an invalid article ID`,
+    });
+  }
+
+  return db
+    .query(
+      `SELECT votes
+      FROM articles
+      WHERE article_id = $1`,
+      [article_id]
+    )
+    .then(({ rows: [{ votes }] }) => {
+      const newVotes = votes + inc_votes;
+
+      return db.query(
+        `UPDATE articles
+        SET votes = $1
+        WHERE article_id = $2
+        RETURNING *`,
+        [newVotes, article_id]
+      );
+    })
+    .then(({ rows }) => {
+      return rows[0];
+    });
 };
