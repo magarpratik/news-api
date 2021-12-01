@@ -189,4 +189,13 @@ describe("GET /api/articles", () => {
         expect(articles).toBeSorted({ key: "title", descending: true });
       });
   });
+
+  it("status 200: accept valid order query", () => {
+    return request(app)
+      .get("/api/articles?order=asc")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toBeSorted({ key: "created_at" });
+      });
+  });
 });

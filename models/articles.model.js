@@ -1,6 +1,6 @@
 const db = require("../db/connection");
 
-exports.selectArticles = (sort_by = "created_at") => {
+exports.selectArticles = (sort_by = "created_at", order = "desc") => {
   if (
     [
       "author",
@@ -10,7 +10,8 @@ exports.selectArticles = (sort_by = "created_at") => {
       "created_at",
       "votes",
       "comment_count",
-    ].includes(`${sort_by}`)
+    ].includes(`${sort_by}`) &&
+    ["asc", "desc"].includes(`${order}`)
   ) {
     return db
       .query(
@@ -27,7 +28,7 @@ exports.selectArticles = (sort_by = "created_at") => {
           GROUP BY articles.article_id
           ) as foo
         ON articles.article_id = foo.article_id
-        ORDER BY ${sort_by} DESC`
+        ORDER BY ${sort_by} ${order}`
       )
       .then(({ rows }) => {
         // change null value to 0
