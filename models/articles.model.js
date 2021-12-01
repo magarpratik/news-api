@@ -138,6 +138,13 @@ exports.updateArticleById = (article_id, inc_votes) => {
 };
 
 exports.selectArticleComments = (article_id) => {
+  if (Number(article_id) < 1) {
+    return Promise.reject({
+      status: 400,
+      msg: "Bad request",
+    });
+  }
+
   return db
     .query(
       `SELECT comment_id, votes, created_at, author, body 

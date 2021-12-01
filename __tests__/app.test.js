@@ -278,4 +278,31 @@ describe("GET /api/articles/:article_id/comments", () => {
         });
       });
   });
+
+  it("status 400: handle invalid data type (String)", () => {
+    return request(app)
+      .get("/api/articles/invalid_id/comments")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+
+  it("status 400: handle invalid data type (Float)", () => {
+    return request(app)
+      .get("/api/articles/5.5/comments")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+
+  it("status 400: handle invalid data type (negative numbers)", () => {
+    return request(app)
+      .get("/api/articles/-1/comments")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
 });
