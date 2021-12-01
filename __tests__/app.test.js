@@ -229,12 +229,21 @@ describe("GET /api/articles", () => {
       });
   });
 
-  it("status 400: handle invalid topic query", () => {
+  it("status 400: handle invalid (non-existent) topic query", () => {
     return request(app)
       .get("/api/articles?topic=invalid_query")
       .expect(400)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Bad request");
       });
-  })
+  });
+
+  it("status 400: handle topic query that does not have any articles associated with it", () => {
+    return request(app)
+      .get("/api/articles?topic=paper")
+      .expect(200)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("No articles found about the topic: paper");
+      });
+  });
 });

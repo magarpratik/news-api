@@ -7,7 +7,6 @@ const {
 exports.getArticles = (req, res, next) => {
   // handle request
   const { sort_by, order, topic } = req.query;
-  console.log(topic)
   // invoke model
   selectArticles(sort_by, order, topic)
     .then((articles) => {

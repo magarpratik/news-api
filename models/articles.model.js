@@ -48,6 +48,12 @@ exports.selectArticles = (sort_by = "created_at", order = "desc", topic) => {
         }
       });
 
+      if (rows.length === 0) {
+        return Promise.reject({
+          status: 200,
+          msg: `No articles found about the topic: ${topic}`,
+        });
+      }
       return rows;
     });
   } else {
