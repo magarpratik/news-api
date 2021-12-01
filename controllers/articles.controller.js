@@ -19,11 +19,21 @@ exports.getArticleById = (req, res, next) => {
 };
 
 exports.patchArticleById = (req, res, next) => {
-  const { article_id } = req.params;
-  const { body: { inc_votes } } = req;
+  // handle request
+  const {
+    body: { inc_votes },
+  } = req;
 
+  if (Object.keys(req.body).length > 1) {
+    res.status(400).send({ msg: "Bad request" });
+  }
+
+  const { article_id } = req.params;
+
+  // invoke model
   updateArticleById(article_id, inc_votes)
     .then((article) => {
+      // send response
       res.status(200).send({ article });
     })
     .catch((err) => {

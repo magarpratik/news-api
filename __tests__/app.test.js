@@ -8,7 +8,7 @@ beforeEach(() => seed(testData));
 afterAll(() => db.end());
 
 describe("ERROR 404: path not found", () => {
-  it("handle non-existent url paths", () => {
+  it("non-existent url path", () => {
     return request(app)
       .get("/api/invalid_path")
       .expect(404)
@@ -26,8 +26,7 @@ describe("GET /api/topics", () => {
     return request(app)
       .get("/api/topics")
       .expect(200)
-      .then(({ body }) => {
-        const { topics } = body;
+      .then(({ body: { topics } }) => {
         expect(topics).toBeInstanceOf(Array);
         expect(topics).toHaveLength(3);
         topics.forEach((topic) => {
@@ -63,35 +62,35 @@ describe("GET /api/articles/:article_id", () => {
     return request(app)
       .get("/api/articles/9999")
       .expect(404)
-      .then(({ body }) => {
-        expect(body.msg).toBe("Article 9999 not found");
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Article 9999 not found");
       });
   });
 
-  it("status 400: handle invalid data type (String)", () => {
+  it("status 400: invalid data type (String)", () => {
     return request(app)
       .get("/api/articles/invalid_id")
       .expect(400)
-      .then(({ body }) => {
-        expect(body.msg).toBe("Bad request");
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
       });
   });
 
-  it("status 400: handle invalid data type (Float)", () => {
+  it("status 400: invalid data type (Float)", () => {
     return request(app)
       .get("/api/articles/2.5")
       .expect(400)
-      .then(({ body }) => {
-        expect(body.msg).toBe("Bad request");
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
       });
   });
 
-  it("status 400: handle invalid data type (negative numbers)", () => {
+  it("status 400: invalid data type (negative numbers)", () => {
     return request(app)
       .get("/api/articles/-1")
       .expect(400)
-      .then(({ body }) => {
-        expect(body.msg).toBe("Bad request");
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
       });
   });
 });
@@ -100,7 +99,6 @@ describe("PATCH /api/articles/:article_id", () => {
   it("status 200: return the updated article", () => {
     // act
     const newVote = { inc_votes: 10 };
-
     // arrange
     // assert
     return request(app)
@@ -117,6 +115,42 @@ describe("PATCH /api/articles/:article_id", () => {
           created_at: expect.any(String),
           votes: 110,
         });
+      });
+  });
+
+  it("status 400: missing required field", () => {
+    const newVote = { test: "test" };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(newVote)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+
+  it("status 400: invalid data type (String)", () => {
+    const newVote = { inc_votes: "invalid_value" };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(newVote)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+
+  it("status 400: other property present on request body", () => {
+    const newVote = {
+      inc_votes: 1,
+      extra_property: "extra value",
+    };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(newVote)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
       });
   });
 });
