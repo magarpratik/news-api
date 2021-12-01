@@ -1,7 +1,17 @@
 const {
+  selectArticles,
   selectArticleById,
   updateArticleById,
 } = require("../models/articles.model");
+
+exports.getArticles = (req, res, next) => {
+  // handle request
+  // invoke model
+  selectArticles().then((articles) => {
+    // send response
+    res.status(200).send({ articles });
+  });
+};
 
 exports.getArticleById = (req, res, next) => {
   // handle request

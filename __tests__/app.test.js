@@ -154,3 +154,29 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
 });
+
+describe("GET /api/articles", () => {
+  it("status 200: return an array of article objects with the appropriate properties", () => {
+    // act
+    // arrange
+    // assert
+    return request(app)
+      .get("/api/articles")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toBeInstanceOf(Array);
+        expect(articles).toHaveLength(12);
+        articles.forEach((article) => {
+          expect(article).toEqual({
+            author: expect.any(String),
+            title: expect.any(String),
+            article_id: expect.any(Number),
+            topic: expect.any(String),
+            created_at: expect.any(String),
+            votes: expect.any(Number),
+            comment_count: expect.any(Number),
+          });
+        });
+      });
+  });
+});

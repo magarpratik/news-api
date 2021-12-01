@@ -1,5 +1,36 @@
 const db = require("../db/connection");
 
+exports.selectArticles = () => {
+  return db
+    .query(
+      `SELECT
+      author, title, articles.article_id, topic,
+      created_at, votes,
+      count as comment_count
+      FROM articles
+      LEFT JOIN (
+        SELECT articles.article_id AS article_id, count(comment_id)
+        FROM articles
+        JOIN comments
+        ON articles.article_id = comments.article_id
+        GROUP BY articles.article_id
+        ) as foo
+      ON articles.article_id = foo.article_id`
+    )
+    .then(({ rows }) => {
+      // change null value to 0
+      rows.forEach((row) => {
+        if (row.comment_count === null) row.comment_count = 0;
+        else {
+          // change String to int
+          row.comment_count = parseInt(row.comment_count);
+        }
+      });
+
+      return rows;
+    });
+};
+
 exports.selectArticleById = (article_id) => {
   // handle invalid inputs such as String, Float and negative numbers
   if (Number(article_id) < 1) {
