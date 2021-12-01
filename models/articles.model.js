@@ -1,6 +1,6 @@
 const db = require("../db/connection");
 
-exports.selectArticles = (sort_by = "created_at", order = "desc") => {
+exports.selectArticles = (sort_by = "created_at", order = "desc", topic) => {
   if (
     [
       "author",
@@ -13,9 +13,8 @@ exports.selectArticles = (sort_by = "created_at", order = "desc") => {
     ].includes(`${sort_by}`) &&
     ["asc", "desc"].includes(`${order}`)
   ) {
-    return db
-      .query(
-        `SELECT
+
+    let queryStr = `SELECT
         author, title, articles.article_id, topic,
         created_at, votes,
         count as comment_count
@@ -27,9 +26,16 @@ exports.selectArticles = (sort_by = "created_at", order = "desc") => {
           ON articles.article_id = comments.article_id
           GROUP BY articles.article_id
           ) as foo
-        ON articles.article_id = foo.article_id
-        ORDER BY ${sort_by} ${order}`
-      )
+        ON articles.article_id = foo.article_id`;
+    
+    if (["cats", "mitch", "paper"].includes(`${topic}`)) {
+      queryStr += ` WHERE topic = '${topic}'`;
+    } 
+    
+    queryStr += ` ORDER BY ${sort_by} ${order}`;
+        
+    return db
+      .query(queryStr)
       .then(({ rows }) => {
         // change null value to 0
         rows.forEach((row) => {

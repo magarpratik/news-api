@@ -198,4 +198,16 @@ describe("GET /api/articles", () => {
         expect(articles).toBeSorted({ key: "created_at" });
       });
   });
+
+  it("status 200: accept valid topic query", () => {
+    return request(app)
+      .get("/api/articles?topic=cats")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toHaveLength(1);
+        articles.forEach((article) => {
+          expect(article.topic).toBe("cats");
+        });
+      });
+  });
 });
