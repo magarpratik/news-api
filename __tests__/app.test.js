@@ -219,4 +219,13 @@ describe("GET /api/articles", () => {
         expect(msg).toBe("Bad request");
       });
   });
+
+  it("status 400: handle invalid order query", () => {
+    return request(app)
+      .get("/api/articles?order=invalid_query")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
 });
