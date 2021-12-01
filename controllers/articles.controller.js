@@ -8,10 +8,14 @@ exports.getArticles = (req, res, next) => {
   // handle request
   const { sort_by, order, topic } = req.query;
   // invoke model
-  selectArticles(sort_by, order, topic).then((articles) => {
-    // send response
-    res.status(200).send({ articles });
-  });
+  selectArticles(sort_by, order, topic)
+    .then((articles) => {
+      // send response
+      res.status(200).send({ articles });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };
 
 exports.getArticleById = (req, res, next) => {

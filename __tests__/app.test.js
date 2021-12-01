@@ -210,4 +210,13 @@ describe("GET /api/articles", () => {
         });
       });
   });
+
+  it("status 400: handle invalid sort_by query (non-existent column)", () => {
+    return request(app)
+      .get("/api/articles?sort_by=invalid_query")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
 });

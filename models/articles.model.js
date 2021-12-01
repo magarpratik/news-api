@@ -13,7 +13,6 @@ exports.selectArticles = (sort_by = "created_at", order = "desc", topic) => {
     ].includes(`${sort_by}`) &&
     ["asc", "desc"].includes(`${order}`)
   ) {
-
     let queryStr = `SELECT
         author, title, articles.article_id, topic,
         created_at, votes,
@@ -27,27 +26,30 @@ exports.selectArticles = (sort_by = "created_at", order = "desc", topic) => {
           GROUP BY articles.article_id
           ) as foo
         ON articles.article_id = foo.article_id`;
-    
+
     if (["cats", "mitch", "paper"].includes(`${topic}`)) {
       queryStr += ` WHERE topic = '${topic}'`;
-    } 
-    
-    queryStr += ` ORDER BY ${sort_by} ${order}`;
-        
-    return db
-      .query(queryStr)
-      .then(({ rows }) => {
-        // change null value to 0
-        rows.forEach((row) => {
-          if (row.comment_count === null) row.comment_count = 0;
-          else {
-            // change String to int
-            row.comment_count = parseInt(row.comment_count);
-          }
-        });
+    }
 
-        return rows;
+    queryStr += ` ORDER BY ${sort_by} ${order}`;
+
+    return db.query(queryStr).then(({ rows }) => {
+      // change null value to 0
+      rows.forEach((row) => {
+        if (row.comment_count === null) row.comment_count = 0;
+        else {
+          // change String to int
+          row.comment_count = parseInt(row.comment_count);
+        }
       });
+
+      return rows;
+    });
+  } else {
+    return Promise.reject({
+      status: 400,
+      msg: "Bad request",
+    });
   }
 };
 
