@@ -156,7 +156,7 @@ describe("PATCH /api/articles/:article_id", () => {
 });
 
 describe("GET /api/articles", () => {
-  it("status 200: return an array of article objects with the appropriate properties", () => {
+  it("status 200: return a sorted array (by date in descending order) of article objects with the appropriate properties", () => {
     // act
     // arrange
     // assert
@@ -166,6 +166,7 @@ describe("GET /api/articles", () => {
       .then(({ body: { articles } }) => {
         expect(articles).toBeInstanceOf(Array);
         expect(articles).toHaveLength(12);
+        expect(articles).toBeSorted({ key: "created_at", descending: true });
         articles.forEach((article) => {
           expect(article).toEqual({
             author: expect.any(String),
@@ -179,4 +180,6 @@ describe("GET /api/articles", () => {
         });
       });
   });
+
+  it("status 200: sort the returned array using the sort_by query", () => {});
 });

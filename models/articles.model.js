@@ -15,7 +15,8 @@ exports.selectArticles = () => {
         ON articles.article_id = comments.article_id
         GROUP BY articles.article_id
         ) as foo
-      ON articles.article_id = foo.article_id`
+      ON articles.article_id = foo.article_id
+      ORDER BY created_at DESC`
     )
     .then(({ rows }) => {
       // change null value to 0
