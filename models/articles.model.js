@@ -1,35 +1,47 @@
 const db = require("../db/connection");
 
-exports.selectArticles = () => {
-  return db
-    .query(
-      `SELECT
-      author, title, articles.article_id, topic,
-      created_at, votes,
-      count as comment_count
-      FROM articles
-      LEFT JOIN (
-        SELECT articles.article_id AS article_id, count(comment_id)
+exports.selectArticles = (sort_by = "created_at") => {
+  if (
+    [
+      "author",
+      "title",
+      "article_id",
+      "topic",
+      "created_at",
+      "votes",
+      "comment_count",
+    ].includes(`${sort_by}`)
+  ) {
+    return db
+      .query(
+        `SELECT
+        author, title, articles.article_id, topic,
+        created_at, votes,
+        count as comment_count
         FROM articles
-        JOIN comments
-        ON articles.article_id = comments.article_id
-        GROUP BY articles.article_id
-        ) as foo
-      ON articles.article_id = foo.article_id
-      ORDER BY created_at DESC`
-    )
-    .then(({ rows }) => {
-      // change null value to 0
-      rows.forEach((row) => {
-        if (row.comment_count === null) row.comment_count = 0;
-        else {
-          // change String to int
-          row.comment_count = parseInt(row.comment_count);
-        }
-      });
+        LEFT JOIN (
+          SELECT articles.article_id AS article_id, count(comment_id)
+          FROM articles
+          JOIN comments
+          ON articles.article_id = comments.article_id
+          GROUP BY articles.article_id
+          ) as foo
+        ON articles.article_id = foo.article_id
+        ORDER BY ${sort_by} DESC`
+      )
+      .then(({ rows }) => {
+        // change null value to 0
+        rows.forEach((row) => {
+          if (row.comment_count === null) row.comment_count = 0;
+          else {
+            // change String to int
+            row.comment_count = parseInt(row.comment_count);
+          }
+        });
 
-      return rows;
-    });
+        return rows;
+      });
+  }
 };
 
 exports.selectArticleById = (article_id) => {

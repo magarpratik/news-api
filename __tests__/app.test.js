@@ -181,5 +181,12 @@ describe("GET /api/articles", () => {
       });
   });
 
-  it("status 200: sort the returned array using the sort_by query", () => {});
+  it("status 200: accept valid sort_by query", () => {
+    return request(app)
+      .get("/api/articles?sort_by=title")
+      .expect(200)
+      .then(({ body: { articles } }) => {
+        expect(articles).toBeSorted({ key: "title", descending: true });
+      });
+  });
 });
