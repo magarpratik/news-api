@@ -73,7 +73,7 @@ describe("GET /api/articles/:article_id", () => {
       .get("/api/articles/invalid_id")
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("invalid_id is an invalid article ID");
+        expect(body.msg).toBe("Bad request");
       });
   });
 
@@ -82,7 +82,7 @@ describe("GET /api/articles/:article_id", () => {
       .get("/api/articles/2.5")
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("2.5 is an invalid article ID");
+        expect(body.msg).toBe("Bad request");
       });
   });
 
@@ -91,7 +91,7 @@ describe("GET /api/articles/:article_id", () => {
       .get("/api/articles/-1")
       .expect(400)
       .then(({ body }) => {
-        expect(body.msg).toBe("-1 is an invalid article ID");
+        expect(body.msg).toBe("Bad request");
       });
   });
 });

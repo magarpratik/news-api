@@ -2,14 +2,10 @@ const db = require("../db/connection");
 
 exports.selectArticleById = (article_id) => {
   // handle invalid inputs such as String, Float and negative numbers
-  if (
-    isNaN(article_id) ||
-    Number(article_id) % 1 !== 0 ||
-    Number(article_id) < 1
-  ) {
+  if (Number(article_id) < 1) {
     return Promise.reject({
       status: 400,
-      msg: `${article_id} is an invalid article ID`,
+      msg: "Bad request",
     });
   }
 
@@ -47,14 +43,10 @@ exports.selectArticleById = (article_id) => {
 };
 
 exports.updateArticleById = (article_id, inc_votes) => {
-  if (
-    isNaN(article_id) ||
-    Number(article_id) % 1 !== 0 ||
-    Number(article_id) < 1
-  ) {
+  if (Number(article_id) < 1) {
     return Promise.reject({
       status: 400,
-      msg: `${article_id} is an invalid article ID`,
+      msg: "Bad request",
     });
   }
 
