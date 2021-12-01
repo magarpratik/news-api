@@ -67,7 +67,7 @@ describe("GET /api/articles/:article_id", () => {
       });
   });
 
-  it("status 400: invalid data type (String)", () => {
+  it("status 400: handle invalid data type (String)", () => {
     return request(app)
       .get("/api/articles/invalid_id")
       .expect(400)
@@ -76,7 +76,7 @@ describe("GET /api/articles/:article_id", () => {
       });
   });
 
-  it("status 400: invalid data type (Float)", () => {
+  it("status 400: handle invalid data type (Float)", () => {
     return request(app)
       .get("/api/articles/2.5")
       .expect(400)
@@ -85,7 +85,7 @@ describe("GET /api/articles/:article_id", () => {
       });
   });
 
-  it("status 400: invalid data type (negative numbers)", () => {
+  it("status 400: handle invalid data type (negative numbers)", () => {
     return request(app)
       .get("/api/articles/-1")
       .expect(400)
@@ -118,7 +118,7 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
 
-  it("status 400: missing required field", () => {
+  it("status 400: handle missing required field", () => {
     const newVote = { test: "test" };
     return request(app)
       .patch("/api/articles/1")
@@ -129,8 +129,19 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
 
-  it("status 400: invalid data type (String)", () => {
+  it("status 400: handle invalid data type (String)", () => {
     const newVote = { inc_votes: "invalid_value" };
+    return request(app)
+      .patch("/api/articles/1")
+      .send(newVote)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+
+  it("status 400: handle invalid data type (Float)", () => {
+    const newVote = { inc_votes: 5.5 };
     return request(app)
       .patch("/api/articles/1")
       .send(newVote)
