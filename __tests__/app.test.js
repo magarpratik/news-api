@@ -228,4 +228,13 @@ describe("GET /api/articles", () => {
         expect(msg).toBe("Bad request");
       });
   });
+
+  it("status 400: handle invalid topic query", () => {
+    return request(app)
+      .get("/api/articles?topic=invalid_query")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  })
 });
