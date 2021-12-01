@@ -27,7 +27,7 @@ describe("GET /api/topics", () => {
       .get("/api/topics")
       .expect(200)
       .then(({ body: { topics } }) => {
-        expect(topics).toBeInstanceOf(Array);
+        expect(Array.isArray(topics)).toBe(true);
         expect(topics).toHaveLength(3);
         topics.forEach((topic) => {
           expect(topic).toEqual({
@@ -164,7 +164,7 @@ describe("GET /api/articles", () => {
       .get("/api/articles")
       .expect(200)
       .then(({ body: { articles } }) => {
-        expect(articles).toBeInstanceOf(Array);
+        expect(Array.isArray(articles)).toBe(true);
         expect(articles).toHaveLength(12);
         expect(articles).toBeSorted({ key: "created_at", descending: true });
         articles.forEach((article) => {
@@ -238,12 +238,33 @@ describe("GET /api/articles", () => {
       });
   });
 
-  it("status 400: handle topic query that does not have any articles associated with it", () => {
+  it("status 200: handle topic query that does not have any articles associated with it", () => {
     return request(app)
       .get("/api/articles?topic=paper")
       .expect(200)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("No articles found about the topic: paper");
+      });
+  });
+});
+
+describe("GET /api/articles/:article_id/comments", () => {
+  it("status 200: return an array of comment objects for the given article, each with appropriate properties", () => {
+    return request(app)
+      .get("/api/articles/1/comments")
+      .expect(200)
+      .then(({ body: { comments } }) => {
+        expect(Array.isArray(comments)).toBe(true);
+        expect(comments).toHaveLength(11);
+        comments.forEach((comment) => {
+          expect(comment).toEqual({
+            comment_id: expect.any(Number),
+            votes: expect.any(Number),
+            created_at: expect.any(String),
+            author: expect.any(String),
+            body: expect.any(String),
+          });
+        });
       });
   });
 });
