@@ -177,7 +177,7 @@ describe("PATCH /api/articles/:article_id", () => {
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Article 999 not found");
       });
-  })
+  });
 });
 
 describe("GET /api/articles", () => {
@@ -326,6 +326,15 @@ describe("GET /api/articles/:article_id/comments", () => {
       .expect(404)
       .then(({ body: { msg } }) => {
         expect(msg).toBe("Article 999 not found");
+      });
+  });
+
+  it("status 200: handle article_id that has no comments", () => {
+    return request(app)
+      .get("/api/articles/11/comments")
+      .expect(200)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Article 11 has no comments");
       });
   });
 });

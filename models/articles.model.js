@@ -161,10 +161,24 @@ exports.selectArticleComments = (article_id) => {
     )
     .then(({ rows }) => {
       if (rows.length === 0) {
-        return Promise.reject({
-          status: 404,
-          msg: `Article ${article_id} not found`,
-        });
+        return db
+          .query(
+            `SELECT article_id
+            FROM articles
+            WHERE article_id = ${article_id}`
+          )
+          .then(({ rows }) => {
+            if (rows.length === 0) {
+              return Promise.reject({
+                status: 404,
+                msg: `Article ${article_id} not found`,
+              });
+            }
+            return Promise.reject({
+              status: 200,
+              msg: `Article ${article_id} has no comments`,
+            });
+          });
       }
 
       return rows;
