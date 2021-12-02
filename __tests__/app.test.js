@@ -319,4 +319,13 @@ describe("GET /api/articles/:article_id/comments", () => {
         expect(msg).toBe("Bad request");
       });
   });
+
+  it("status 404: article not found", () => {
+    return request(app)
+      .get("/api/articles/999/comments")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Article 999 not found");
+      });
+  });
 });
