@@ -340,7 +340,38 @@ describe("GET /api/articles/:article_id/comments", () => {
 });
 
 describe("POST /api/articles/:article_id/comments", () => {
-  it("status 201: post a new comment and return it", () => {
+  it("status 201: post a new comment in the table", () => {
+    // act
+    const newComment = {
+      username: "lurker",
+      body: "test comment",
+    };
+    // arrange
+    // assert
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(201)
+      .then(() => {
+        return db
+          .query(
+            `SELECT * FROM comments
+            WHERE comment_id = 19`
+          )
+          .then(({ rows }) => {
+            expect(rows[0]).toEqual({
+              comment_id: 19,
+              author: "lurker",
+              article_id: 1,
+              votes: 0,
+              created_at: expect.any(Date),
+              body: "test comment",
+            });
+          });
+      });
+  });
+
+  it("status 201: respond with the newly posted comment", () => {
     // act
     const newComment = {
       username: "lurker",
@@ -364,7 +395,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 
-  it("status 400: handle invalid data type (String)", () => {
+  it("status 400: handle invalid data type for article_id (String)", () => {
     const newComment = {
       username: "lurker",
       body: "test comment",
@@ -379,7 +410,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 
-  it("status 400: handle invalid data type (Float)", () => {
+  it("status 400: handle invalid data type for article_id (Float)", () => {
     const newComment = {
       username: "lurker",
       body: "test comment",
@@ -394,7 +425,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 
-  it("status 400: handle invalid data type (negative numbers)", () => {
+  it("status 400: handle invalid data type for article_id (negative numbers)", () => {
     const newComment = {
       username: "lurker",
       body: "test comment",
@@ -424,7 +455,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 
-  it("status 400: handle missing required field)", () => {
+  it("status 400: handle missing required field", () => {
     const newComment = {
       username: "lurker",
     };
@@ -438,7 +469,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 
-  it("status 400: handle extra properties in the request body)", () => {
+  it("status 400: handle extra properties in the request body", () => {
     const newComment = {
       username: "lurker",
       body: "test comment",
