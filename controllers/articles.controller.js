@@ -76,7 +76,13 @@ exports.postComment = (req, res, next) => {
     body: { username, body },
   } = req;
 
-  insertComment(article_id, username, body).then((newComment) => {
-    res.status(201).send({ newComment });
-  });
+  
+
+  insertComment(article_id, username, body)
+    .then((newComment) => {
+      res.status(201).send({ newComment });
+    })
+    .catch((err) => {
+      next(err);
+    });
 };

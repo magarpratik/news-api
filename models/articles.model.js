@@ -107,6 +107,7 @@ exports.selectArticleById = (article_id) => {
 };
 
 exports.updateArticleById = (article_id, inc_votes) => {
+  // reject negative article_id
   if (Number(article_id) < 1) {
     return Promise.reject({
       status: 400,
@@ -186,6 +187,13 @@ exports.selectArticleComments = (article_id) => {
 };
 
 exports.insertComment = (article_id, username, body) => {
+  if (!username || !body) {
+    return Promise.reject({
+      status: 400,
+      msg: "Bad request",
+    });
+  }
+
   return db
     .query(
       `INSERT INTO comments

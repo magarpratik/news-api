@@ -340,7 +340,7 @@ describe("GET /api/articles/:article_id/comments", () => {
 });
 
 describe("POST /api/articles/:article_id/comments", () => {
-  it("return the posted comment", () => {
+  it("status 201: post a new comment and return it", () => {
     // act
     const newComment = {
       username: "lurker",
@@ -363,4 +363,80 @@ describe("POST /api/articles/:article_id/comments", () => {
         });
       });
   });
+
+  it("status 400: handle invalid data type (String)", () => {
+    const newComment = {
+      username: "lurker",
+      body: "test comment",
+    };
+
+    return request(app)
+      .post("/api/articles/invalid_id/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+
+  it("status 400: handle invalid data type (Float)", () => {
+    const newComment = {
+      username: "lurker",
+      body: "test comment",
+    };
+
+    return request(app)
+      .post("/api/articles/5.5/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+
+  it("status 400: handle invalid data type (negative numbers)", () => {
+    const newComment = {
+      username: "lurker",
+      body: "test comment",
+    };
+
+    return request(app)
+      .post("/api/articles/-1/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+
+  it("status 400: handle invalid data type (non-existent article_id)", () => {
+    const newComment = {
+      username: "lurker",
+      body: "test comment",
+    };
+
+    return request(app)
+      .post("/api/articles/999/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+
+  it("status 400: handle missing required field)", () => {
+    const newComment = {
+      username: "lurker",
+    };
+
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+  
+  // extra properties
 });
