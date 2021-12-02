@@ -4,10 +4,12 @@
   "description": "bc-nc-news",
   "main": "index.js",
   "scripts": {
+    "start": "node listen.js",
     "setup-dbs": "psql -f ./db/setup.sql",
     "seed": "node ./db/seeds/run-seed.js",
     "test": "jest",
-    "sql": "psql -f test.sql > test.txt"
+    "sql": "psql -f test.sql > test.txt",
+    "seed:prod": "NODE_ENV=production DATABASE_URL=$(heroku config:get DATABASE_URL) npm run seed"
   },
   "repository": {
     "type": "git",
@@ -32,6 +34,8 @@
     "supertest": "^6.1.6"
   },
   "jest": {
-    "setupFilesAfterEnv": ["jest-sorted"]
+    "setupFilesAfterEnv": [
+      "jest-sorted"
+    ]
   }
 }
