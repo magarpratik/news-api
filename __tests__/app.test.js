@@ -338,3 +338,29 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("POST /api/articles/:article_id/comments", () => {
+  it("return the posted comment", () => {
+    // act
+    const newComment = {
+      username: "lurker",
+      body: "test comment",
+    };
+    // arrange
+    // assert
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(201)
+      .then(({ body: { newComment } }) => {
+        expect(newComment).toEqual({
+          comment_id: 19,
+          author: "lurker",
+          article_id: 1,
+          votes: 0,
+          created_at: expect.any(String),
+          body: "test comment",
+        });
+      });
+  });
+});
