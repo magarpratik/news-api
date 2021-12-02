@@ -437,6 +437,20 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(msg).toBe("Bad request");
       });
   });
-  
-  // extra properties
+
+  it("status 400: handle extra properties in the request body)", () => {
+    const newComment = {
+      username: "lurker",
+      body: "test comment",
+      extra: "extra property",
+    };
+
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
 });

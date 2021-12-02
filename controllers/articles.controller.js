@@ -76,7 +76,9 @@ exports.postComment = (req, res, next) => {
     body: { username, body },
   } = req;
 
-  
+  if (Object.keys(req.body).length > 2) {
+    res.status(400).send({ msg: "Bad request" });
+  }
 
   insertComment(article_id, username, body)
     .then((newComment) => {
