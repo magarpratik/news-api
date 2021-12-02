@@ -164,6 +164,20 @@ describe("PATCH /api/articles/:article_id", () => {
         expect(msg).toBe("Bad request");
       });
   });
+
+  it("status 404: article not found", () => {
+    // act
+    const newVote = { inc_votes: 10 };
+    // arrange
+    // assert
+    return request(app)
+      .patch("/api/articles/999")
+      .send(newVote)
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Article 999 not found");
+      });
+  })
 });
 
 describe("GET /api/articles", () => {

@@ -121,8 +121,15 @@ exports.updateArticleById = (article_id, inc_votes) => {
       WHERE article_id = $1`,
       [article_id]
     )
-    .then(({ rows: [{ votes }] }) => {
-      const newVotes = votes + inc_votes;
+    .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: `Article ${article_id} not found`,
+        });
+      }
+
+      const newVotes = rows[0].votes + inc_votes;
 
       return db.query(
         `UPDATE articles
