@@ -13,6 +13,9 @@ const {
 
 // handle requests
 app.use("/api", apiRouter);
+app.use("/", (req, res) => {
+  res.status(200).send({ msg: "Welcome to North News!" });
+});
 
 // handle path errors
 app.all("/*", handlePathErrors);

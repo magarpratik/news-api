@@ -8,7 +8,7 @@ apiRouter.use("/topics", topicRouter);
 apiRouter.use("/articles", articleRouter);
 apiRouter.use("/comments", commentRouter);
 
-apiRouter.route("/").get((req, res, next) => {
+apiRouter.route("/").get((req, res) => {
   res.status(200).send(endpoints);
 });
 

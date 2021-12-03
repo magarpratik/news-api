@@ -96,7 +96,7 @@ describe("GET /api/articles/:article_id", () => {
 });
 
 describe("PATCH /api/articles/:article_id", () => {
-  it("status 200: return the updated article", () => {
+  it("status 200: update the specified article and return it", () => {
     // act
     const newVote = { inc_votes: 10 };
     // arrange

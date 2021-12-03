@@ -3,15 +3,15 @@
     "description": "serves up a json representation of all the available endpoints of the api"
   },
   "GET /api/topics": {
-    "description": "serves an array of all topics",
+    "description": "returns an array of topics",
     "queries": [],
     "exampleResponse": {
       "topics": [{ "slug": "football", "description": "Footie!" }]
     }
   },
   "GET /api/articles": {
-    "description": "serves an array of all topics",
-    "queries": ["author", "topic", "sort_by", "order"],
+    "description": "returns an array of articles",
+    "queries": ["topic", "sort_by", "order"],
     "exampleResponse": {
       "articles": [
         {
@@ -22,6 +22,41 @@
           "created_at": 1527695953341
         }
       ]
+    }
+  },
+  "GET /api/articles/:article_id": {
+    "description": "returns the given article",
+    "queries": [],
+    "exampleResponse": {
+      "topics": [{}]
+    }
+  },
+  "PATCH /api/articles/:article_id": {
+    "description": "updates vote count of the given article and returns it",
+    "queries": [],
+    "exampleResponse": {
+      "topics": [{}]
+    }
+  },
+  "GET /api/articles/:article_id/comments": {
+    "description": "returns an array of comments associated with the given article",
+    "queries": [],
+    "exampleResponse": {
+      "topics": [{}]
+    }
+  },
+  "POST /api/articles/:article_id/comments": {
+    "description": "inserts a new comment and returns it",
+    "queries": [],
+    "exampleResponse": {
+      "topics": [{}]
+    }
+  },
+  "DELETE /api/comments/:comment_id": {
+    "description": "deletes the given comment",
+    "queries": [],
+    "exampleResponse": {
+      "topics": [{}]
     }
   }
 }
