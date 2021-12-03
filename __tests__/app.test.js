@@ -485,3 +485,22 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 });
+
+describe("DELETE /api/comments/:comment_id", () => {
+  it("status 204: deletes the specified comment", () => {
+    return request(app)
+      .delete("/api/comments/1")
+      .expect(204)
+      .then(() => {
+        return db
+          .query(
+            `SELECT comment_id
+            FROM comments
+            WHERE comment_id = 1`
+          )
+          .then(({ rows }) => {
+            expect(rows).toEqual([]);
+          });
+      });
+  });
+});
