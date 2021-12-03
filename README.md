@@ -10,7 +10,7 @@ North News API mimics a real world backend service (such as reddit) which stores
 
 ### Step 1: Cloning the project to your local machine
 
-You can clone the project to your local machine using `git` by executing the following command:
+Clone the project to your local machine using `git` by executing the following command:
 
 ```
 git clone https://github.com/magarpratik/be-nc-news.git
@@ -18,7 +18,7 @@ git clone https://github.com/magarpratik/be-nc-news.git
 
 ### Step 2: Installing the required dependencies
 
-You can install all the required dependencies for the project by executing the following `npm` command in the project root:
+Install all the required dependencies by executing the following `npm` command in the project root:
 
 ```
 npm install
@@ -26,13 +26,13 @@ npm install
 
 ### Step 3: Setting up the database
 
-First, you need to create the local database by running the script `setup-dbs` as shown below:
+First, create the local database by running the script `setup-dbs` as shown below:
 
 ```
 npm run setup-dbs
 ```
 
-Then, you need to run the following script to seed the database:
+Then, run the following script to seed the database:
 
 ```
 npm run seed
@@ -44,7 +44,7 @@ You will need to create _two_ `.env` files for your project: `.env.test` and `.e
 
 ## Running the tests
 
-To run the tests, you need to execute the following script:
+To run the tests, execute the following script:
 
 ```
 npm test
