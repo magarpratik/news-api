@@ -115,14 +115,22 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
 
-  it("status 400: handle missing required field", () => {
+  it("status 200: handle missing inc_votes", () => {
     const newVote = { test: "test" };
     return request(app)
       .patch("/api/articles/1")
       .send(newVote)
-      .expect(400)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe("Bad request");
+      .expect(200)
+      .then(({ body: { article } }) => {
+        expect(article).toEqual({
+          author: "butter_bridge",
+          title: "Living in the shadow of a great man",
+          article_id: 1,
+          body: "I find this existence challenging",
+          topic: "mitch",
+          created_at: expect.any(String),
+          votes: 100,
+        });
       });
   });
 

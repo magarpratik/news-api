@@ -1,7 +1,7 @@
 const {
   selectArticles,
   selectArticleById,
-  updateArticleById,
+  updateArticle,
   selectArticleComments,
   insertComment,
 } = require("../models/articles.model");
@@ -41,7 +41,7 @@ exports.patchArticleById = (req, res, next) => {
 
   const { article_id } = req.params;
 
-  updateArticleById(article_id, inc_votes)
+  updateArticle(article_id, inc_votes)
     .then((article) => {
       res.status(200).send({ article });
     })

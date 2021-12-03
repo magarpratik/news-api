@@ -106,13 +106,25 @@ exports.selectArticleById = (article_id) => {
   });
 };
 
-exports.updateArticleById = (article_id, inc_votes) => {
+exports.updateArticle = (article_id, inc_votes) => {
   // reject negative article_id
   if (Number(article_id) < 1) {
     return Promise.reject({
       status: 400,
       msg: "Bad request",
     });
+  }
+
+  if (!inc_votes) {
+    return db
+      .query(
+        `SELECT * FROM articles
+        WHERE article_id = $1`,
+        [article_id]
+      )
+      .then(({ rows }) => {
+        return rows[0];
+      });
   }
 
   return db
