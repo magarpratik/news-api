@@ -253,12 +253,12 @@ describe("GET /api/articles", () => {
       });
   });
 
-  it("status 400: handle invalid (non-existent) topic query", () => {
+  it("status 404: handle invalid (non-existent) topic query", () => {
     return request(app)
       .get("/api/articles?topic=invalid_query")
-      .expect(400)
+      .expect(404)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("Bad request");
+        expect(msg).toBe("Not found");
       });
   });
 

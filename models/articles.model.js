@@ -31,8 +31,8 @@ exports.selectArticles = (sort_by = "created_at", order = "desc", topic) => {
       queryStr += ` WHERE topic = '${topic}'`;
     } else if (topic) {
       return Promise.reject({
-        status: 400,
-        msg: "Bad request",
+        status: 404,
+        msg: "Not found",
       });
     }
 
