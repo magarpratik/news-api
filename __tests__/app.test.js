@@ -266,8 +266,8 @@ describe("GET /api/articles", () => {
     return request(app)
       .get("/api/articles?topic=paper")
       .expect(200)
-      .then(({ body: { msg } }) => {
-        expect(msg).toBe("No articles found about the topic: paper");
+      .then(({ body: { articles } }) => {
+        expect(articles).toEqual([]);
       });
   });
 });
