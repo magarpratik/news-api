@@ -6,24 +6,24 @@ on:
 
 jobs:
   test:
-  name: Test
-  runs-on: ubuntu-latest
-  steps:
-    - name: Checkout Repo
-      uses: actions/checkout@v2
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout Repo
+        uses: actions/checkout@v2
 
-    - name: Use Node.js
-      uses: actions/setup-node@v2
+      - name: Use Node.js
+        uses: actions/setup-node@v2
 
-    - name: Use PostgreSQL
-      uses: harmon758/postgresql-action@v1
-      with:
-        postgresql db: "north_news"
-        postgresql user: "dev"
-        postgresql password: "P@55W0RD"
+      - name: Use PostgreSQL
+        uses: harmon758/postgresql-action@v1
+        with:
+          postgresql db: "north_news"
+          postgresql user: "dev"
+          postgresql password: "P@55W0RD"
 
-    - name: Install dependencies
-      run: npm ci
+      - name: Install dependencies
+        run: npm ci
 
-    - name: Run tests
-      run: PGDATABASE=north_news PGUSER=dev PGPASSWORD=P@55W0RD npm t
+      - name: Run tests
+        run: PGDATABASE=north_news PGUSER=dev PGPASSWORD=P@55W0RD npm t
