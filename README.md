@@ -38,7 +38,7 @@ Then, you need to run the following script to seed the database:
 npm run seed
 ```
 
-### Step 4: Creating the .env files ?
+### Step 4: Creating the `.env` files
 
 You will need to create _two_ `.env` files for your project: `.env.test` and `.env.development`. Into each, add `PGDATABASE=<database_name_here>`, with the correct database name for that environment (see `/db/setup.sql` for the database names). Double check that these `.env` files are .gitignored.
 
@@ -50,7 +50,7 @@ To run the tests, you need to execute the following script:
 npm test
 ```
 
-## Project requirements
+## Minimum requirements
 
 Node.js: v16.11.1
 
