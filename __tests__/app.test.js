@@ -376,8 +376,8 @@ describe("POST /api/articles/:article_id/comments", () => {
       .post("/api/articles/1/comments")
       .send(newComment)
       .expect(201)
-      .then(({ body: { newComment } }) => {
-        expect(newComment).toEqual({
+      .then(({ body: { comment } }) => {
+        expect(comment).toEqual({
           comment_id: 19,
           author: "lurker",
           article_id: 1,
