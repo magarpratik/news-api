@@ -7,8 +7,6 @@ exports.removeComment = (comment_id) => {
       msg: "Bad request",
     });
   }
-  
-
 
   return db.query(
     `DELETE FROM comments
