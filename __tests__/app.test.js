@@ -85,7 +85,7 @@ describe("GET /api/articles/:article_id", () => {
       });
   });
 
-  it("status 400: handle invalid data type (negative numbers)", () => {
+  it("status 400: handle invalid input (negative numbers)", () => {
     return request(app)
       .get("/api/articles/-1")
       .expect(400)
@@ -245,7 +245,7 @@ describe("GET /api/articles", () => {
       });
   });
 
-  it("status 400: handle invalid order query", () => {
+  it("status 400: handle invalid (non-existent) order query", () => {
     return request(app)
       .get("/api/articles?order=invalid_query")
       .expect(400)
@@ -311,7 +311,7 @@ describe("GET /api/articles/:article_id/comments", () => {
       });
   });
 
-  it("status 400: handle invalid data type (negative numbers)", () => {
+  it("status 400: handle invalid input (negative numbers)", () => {
     return request(app)
       .get("/api/articles/-1/comments")
       .expect(400)
@@ -425,7 +425,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 
-  it("status 400: handle invalid data type for article_id (negative numbers)", () => {
+  it("status 400: handle invalid input for article_id (negative numbers)", () => {
     const newComment = {
       username: "lurker",
       body: "test comment",
@@ -440,7 +440,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 
-  it("status 400: handle invalid data type (non-existent article_id)", () => {
+  it("status 400: handle invalid input(non-existent article_id)", () => {
     const newComment = {
       username: "lurker",
       body: "test comment",
@@ -501,6 +501,42 @@ describe("DELETE /api/comments/:comment_id", () => {
           .then(({ rows }) => {
             expect(rows).toEqual([]);
           });
+      });
+  });
+
+  it("status 400: handle invalid data type (String)", () => {
+    return request(app)
+      .delete("/api/comments/invalid_id")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+
+  it("status 400: handle invalid data type (Float)", () => {
+    return request(app)
+      .delete("/api/comments/5.5")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+
+  it("status 400: handle invalid input (negative numbers)", () => {
+    return request(app)
+      .delete("/api/comments/-1")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+
+  it("status 400: handle invalid input (non-existent comment_id)", () => {
+    return request(app)
+      .delete("/api/comments/999")
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
       });
   });
 });
