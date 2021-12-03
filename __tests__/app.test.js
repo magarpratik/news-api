@@ -20,9 +20,6 @@ describe("ERROR 404: path not found", () => {
 
 describe("GET /api/topics", () => {
   it("status 200: return an array of topic objects, each with properties: slug, description", () => {
-    // act
-    // arrange
-    // assert
     return request(app)
       .get("/api/topics")
       .expect(200)
@@ -166,10 +163,7 @@ describe("PATCH /api/articles/:article_id", () => {
   });
 
   it("status 404: article not found", () => {
-    // act
     const newVote = { inc_votes: 10 };
-    // arrange
-    // assert
     return request(app)
       .patch("/api/articles/999")
       .send(newVote)
@@ -182,9 +176,6 @@ describe("PATCH /api/articles/:article_id", () => {
 
 describe("GET /api/articles", () => {
   it("status 200: return a sorted array (by date in descending order) of article objects with the appropriate properties", () => {
-    // act
-    // arrange
-    // assert
     return request(app)
       .get("/api/articles")
       .expect(200)
@@ -341,13 +332,10 @@ describe("GET /api/articles/:article_id/comments", () => {
 
 describe("POST /api/articles/:article_id/comments", () => {
   it("status 201: post a new comment in the table", () => {
-    // act
     const newComment = {
       username: "lurker",
       body: "test comment",
     };
-    // arrange
-    // assert
     return request(app)
       .post("/api/articles/1/comments")
       .send(newComment)
@@ -372,13 +360,10 @@ describe("POST /api/articles/:article_id/comments", () => {
   });
 
   it("status 201: respond with the newly posted comment", () => {
-    // act
     const newComment = {
       username: "lurker",
       body: "test comment",
     };
-    // arrange
-    // assert
     return request(app)
       .post("/api/articles/1/comments")
       .send(newComment)
@@ -551,7 +536,7 @@ describe("GET /api/users", () => {
         expect(users).toHaveLength(4);
         users.forEach((user) => {
           expect(user).toEqual({
-            username: expect.any(String)
+            username: expect.any(String),
           });
         });
       });

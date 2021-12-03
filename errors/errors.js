@@ -1,5 +1,3 @@
-// this is a normal middleware
-// not a specific error handling one
 exports.handlePathErrors = (req, res) => {
   res.status(404).send({ msg: "Path not found" });
 };

@@ -7,12 +7,10 @@ const {
 } = require("../models/articles.model");
 
 exports.getArticles = (req, res, next) => {
-  // handle request
   const { sort_by, order, topic } = req.query;
-  // invoke model
+
   selectArticles(sort_by, order, topic)
     .then((articles) => {
-      // send response
       res.status(200).send({ articles });
     })
     .catch((err) => {
@@ -21,13 +19,10 @@ exports.getArticles = (req, res, next) => {
 };
 
 exports.getArticleById = (req, res, next) => {
-  // handle request
   const { article_id } = req.params;
 
-  // invoke model
   selectArticleById(article_id)
     .then((article) => {
-      // send response
       res.status(200).send({ article });
     })
     .catch((err) => {
@@ -36,7 +31,6 @@ exports.getArticleById = (req, res, next) => {
 };
 
 exports.patchArticleById = (req, res, next) => {
-  // handle request
   const {
     body: { inc_votes },
   } = req;
@@ -47,10 +41,8 @@ exports.patchArticleById = (req, res, next) => {
 
   const { article_id } = req.params;
 
-  // invoke model
   updateArticleById(article_id, inc_votes)
     .then((article) => {
-      // send response
       res.status(200).send({ article });
     })
     .catch((err) => {
