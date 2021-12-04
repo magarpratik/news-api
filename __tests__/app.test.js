@@ -595,13 +595,13 @@ describe("PATCH /api/comments/:comment_id", () => {
   // status 200: update the given comment_vote
 
   it("status 200: update the specified articled and return it", () => {
-    const inc_votes = {
+    const newVote = {
       inc_votes: 1,
     };
 
     return request(app)
       .patch("/api/comments/1")
-      .send(inc_votes)
+      .send(newVote)
       .expect(200)
       .then(({ body: { comment } }) => {
         expect(comment).toEqual({
@@ -654,7 +654,20 @@ describe("PATCH /api/comments/:comment_id", () => {
         });
       });
   });
-  
+
+  it("status 400: other property present on request body", () => {
+    const newVote = {
+      inc_votes: 1,
+      extra_property: "extra value",
+    };
+    return request(app)
+      .patch("/api/comments/1")
+      .send(newVote)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
   // status 400: other property present on request body
   // status 404: comment not found
 });

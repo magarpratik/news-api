@@ -5,6 +5,10 @@ exports.patchComment = (req, res, next) => {
     body: { inc_votes },
   } = req;
 
+  if (Object.keys(req.body).length > 1) {
+    res.status(400).send({ msg: "Bad request" });
+  }
+
   const { comment_id } = req.params;
 
   updateComment(comment_id, inc_votes)

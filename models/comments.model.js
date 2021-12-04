@@ -1,7 +1,6 @@
 const db = require("../db/connection");
 
 exports.updateComment = (comment_id, inc_votes) => {
-
   if (!inc_votes) {
     return db
       .query(
