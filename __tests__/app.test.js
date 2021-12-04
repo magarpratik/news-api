@@ -433,7 +433,7 @@ describe("POST /api/articles/:article_id/comments", () => {
       });
   });
 
-  it("status 400: handle invalid input(non-existent article_id)", () => {
+  it("status 404: handle invalid input(non-existent article_id)", () => {
     const newComment = {
       username: "lurker",
       body: "test comment",
@@ -442,9 +442,9 @@ describe("POST /api/articles/:article_id/comments", () => {
     return request(app)
       .post("/api/articles/999/comments")
       .send(newComment)
-      .expect(400)
+      .expect(404)
       .then(({ body: { msg } }) => {
-        expect(msg).toBe("Bad request");
+        expect(msg).toBe("Not found");
       });
   });
 
