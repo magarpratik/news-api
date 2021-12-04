@@ -615,9 +615,28 @@ describe("PATCH /api/comments/:comment_id", () => {
       });
   });
 
-  // status 200: return the updated comment
-  // status 400: handle invalid data type (String)
-  // status 400: handle invalid data type (Float)
+  it("status 400: handle invalid data type (String)", () => {
+    const newVote = { inc_votes: "invalid_value" };
+    return request(app)
+      .patch("/api/comments/1")
+      .send(newVote)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+
+  it("status 400: handle invalid data type (Float)", () => {
+    const newVote = { inc_votes: 5.5 };
+    return request(app)
+      .patch("/api/comments/1")
+      .send(newVote)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+
   // status 400: other property present on request body
   // status 404: comment not found
 });
