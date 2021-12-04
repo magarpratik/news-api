@@ -580,4 +580,13 @@ describe("GET /api/users/:username", () => {
         });
       });
   });
+
+  it("status 404: return the given user object", () => {
+    return request(app)
+      .get("/api/users/invalid_username")
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Not found");
+      });
+  });
 });
