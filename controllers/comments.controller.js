@@ -6,7 +6,7 @@ exports.deleteComment = (req, res, next) => {
   removeComment(comment_id)
     .then(({ rows }) => {
       if (rows[0]) res.status(204).send();
-      res.status(400).send({ msg: "Bad request" });
+      res.status(404).send({ msg: "Not found" });
     })
     .catch((err) => {
       next(err);
