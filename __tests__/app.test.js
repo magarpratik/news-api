@@ -156,6 +156,17 @@ describe("PATCH /api/articles/:article_id", () => {
       });
   });
 
+  it("status 400: handle invalid data type (negative numbers)", () => {
+    const newVote = { inc_votes: 1 };
+    return request(app)
+      .patch("/api/articles/-1")
+      .send(newVote)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+
   it("status 400: other property present on request body", () => {
     const newVote = {
       inc_votes: 1,
@@ -637,6 +648,17 @@ describe("PATCH /api/comments/:comment_id", () => {
       });
   });
 
+  it("status 400: handle invalid data type (negative numbers)", () => {
+    const newVote = { inc_votes: 1 };
+    return request(app)
+      .patch("/api/comments/-1")
+      .send(newVote)
+      .expect(400)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Bad request");
+      });
+  });
+
   it("status 200: handle missing inc_votes", () => {
     const newVote = { test: "test" };
     return request(app)
@@ -655,7 +677,7 @@ describe("PATCH /api/comments/:comment_id", () => {
       });
   });
 
-  it("status 400: other property present on request body", () => {
+  it("status 400: handle other properties present on request body", () => {
     const newVote = {
       inc_votes: 1,
       extra_property: "extra value",
@@ -668,6 +690,15 @@ describe("PATCH /api/comments/:comment_id", () => {
         expect(msg).toBe("Bad request");
       });
   });
-  // status 400: other property present on request body
-  // status 404: comment not found
+  
+  it("status 404: comment not found", () => {
+    const newVote = { inc_votes: 1 };
+    return request(app)
+      .patch("/api/comments/999")
+      .send(newVote)
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Not found");
+      });
+  });
 });

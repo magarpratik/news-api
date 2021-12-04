@@ -1,6 +1,13 @@
 const db = require("../db/connection");
 
 exports.updateComment = (comment_id, inc_votes) => {
+  if (Number(comment_id) < 1) {
+    return Promise.reject({
+      status: 400,
+      msg: "Bad request",
+    });
+  }
+
   if (!inc_votes) {
     return db
       .query(
@@ -21,6 +28,13 @@ exports.updateComment = (comment_id, inc_votes) => {
       [comment_id]
     )
     .then(({ rows }) => {
+      if (rows.length === 0) {
+        return Promise.reject({
+          status: 404,
+          msg: `Not found`,
+        });
+      }
+
       const newVotes = rows[0].votes + inc_votes;
 
       return db.query(
