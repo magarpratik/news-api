@@ -590,3 +590,34 @@ describe("GET /api/users/:username", () => {
       });
   });
 });
+
+describe("PATCH /api/comments/:comment_id", () => {
+  // status 200: update the given comment_vote
+
+  it("status 200: update the specified articled and return it", () => {
+    const inc_votes = {
+      inc_votes: 1,
+    };
+
+    return request(app)
+      .patch("/api/comments/1")
+      .send(inc_votes)
+      .expect(200)
+      .then(({ body: { comment } }) => {
+        expect(comment).toEqual({
+          comment_id: 1,
+          author: "butter_bridge",
+          article_id: 9,
+          votes: 17,
+          body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+          created_at: expect.any(String),
+        });
+      });
+  });
+
+  // status 200: return the updated comment
+  // status 400: handle invalid data type (String)
+  // status 400: handle invalid data type (Float)
+  // status 400: other property present on request body
+  // status 404: comment not found
+});
