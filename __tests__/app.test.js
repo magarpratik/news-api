@@ -550,7 +550,7 @@ describe("DELETE /api/comments/:comment_id", () => {
 });
 
 describe("GET /api/users", () => {
-  it("status 200: respond with an array of users, each with the property: username", () => {
+  it("status 200: return an array of users, each with the property: username", () => {
     return request(app)
       .get("/api/users")
       .expect(200)
@@ -561,6 +561,22 @@ describe("GET /api/users", () => {
           expect(user).toEqual({
             username: expect.any(String),
           });
+        });
+      });
+  });
+});
+
+describe("GET /api/users/:username", () => {
+  it("status 200: return the given user object", () => {
+    return request(app)
+      .get("/api/users/lurker")
+      .expect(200)
+      .then(({ body: { user } }) => {
+        expect(user).toEqual({
+          username: "lurker",
+          name: "do_nothing",
+          avatar_url:
+            "https://www.golenbock.com/wp-content/uploads/2015/01/placeholder-user.png",
         });
       });
   });
