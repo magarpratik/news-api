@@ -30,7 +30,7 @@ exports.getArticleById = (req, res, next) => {
     });
 };
 
-exports.patchArticleById = (req, res, next) => {
+exports.patchArticle = (req, res, next) => {
   const {
     body: { inc_votes },
   } = req;

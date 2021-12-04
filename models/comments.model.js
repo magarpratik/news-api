@@ -1,6 +1,19 @@
 const db = require("../db/connection");
 
 exports.updateComment = (comment_id, inc_votes) => {
+
+  if (!inc_votes) {
+    return db
+      .query(
+        `SELECT * FROM comments
+        WHERE comment_id = $1`,
+        [comment_id]
+      )
+      .then(({ rows }) => {
+        return rows[0];
+      });
+  }
+
   return db
     .query(
       `SELECT votes

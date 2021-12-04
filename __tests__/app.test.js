@@ -637,6 +637,24 @@ describe("PATCH /api/comments/:comment_id", () => {
       });
   });
 
+  it("status 200: handle missing inc_votes", () => {
+    const newVote = { test: "test" };
+    return request(app)
+      .patch("/api/comments/1")
+      .send(newVote)
+      .expect(200)
+      .then(({ body: { comment } }) => {
+        expect(comment).toEqual({
+          comment_id: 1,
+          author: "butter_bridge",
+          article_id: 9,
+          votes: 16,
+          body: "Oh, I've got compassion running out of my nose, pal! I'm the Sultan of Sentiment!",
+          created_at: expect.any(String),
+        });
+      });
+  });
+  
   // status 400: other property present on request body
   // status 404: comment not found
 });
