@@ -477,6 +477,21 @@ describe("POST /api/articles/:article_id/comments", () => {
         expect(msg).toBe("Bad request");
       });
   });
+
+  it("status 404: username in request body does not exist", () => {
+    const newComment = {
+      username: "invalid_username",
+      body: "test comment",
+    };
+
+    return request(app)
+      .post("/api/articles/1/comments")
+      .send(newComment)
+      .expect(404)
+      .then(({ body: { msg } }) => {
+        expect(msg).toBe("Not found");
+      });
+  });
 });
 
 describe("DELETE /api/comments/:comment_id", () => {

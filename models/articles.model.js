@@ -209,10 +209,9 @@ exports.insertComment = (article_id, username, body) => {
 
   return db
     .query(
-      `SELECT article_id
-      FROM articles
-      WHERE article_id = $1`,
-      [article_id]
+      `SELECT username FROM users
+      WHERE username = $1`,
+      [username]
     )
     .then(({ rows }) => {
       if (rows.length === 0) {
@@ -225,15 +224,32 @@ exports.insertComment = (article_id, username, body) => {
     .then(() => {
       return db
         .query(
-          `INSERT INTO comments
-          (article_id, author, body)
-          VALUES
-          ($1, $2, $3)
-          RETURNING *`,
-          [article_id, username, body]
+          `SELECT article_id
+          FROM articles
+          WHERE article_id = $1`,
+          [article_id]
         )
         .then(({ rows }) => {
-          return rows[0];
+          if (rows.length === 0) {
+            return Promise.reject({
+              status: 404,
+              msg: "Not found",
+            });
+          }
+        })
+        .then(() => {
+          return db
+            .query(
+              `INSERT INTO comments
+              (article_id, author, body)
+              VALUES
+              ($1, $2, $3)
+              RETURNING *`,
+              [article_id, username, body]
+            )
+            .then(({ rows }) => {
+              return rows[0];
+            });
         });
     });
 };
