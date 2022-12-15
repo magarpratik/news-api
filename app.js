@@ -4,6 +4,13 @@ app.use(express.json());
 
 const apiRouter = require("./routers/api-router");
 
+var cors = require("cors");
+app.use(
+  cors({
+    origin: "https://northnews.netlify.app",
+  })
+);
+
 const {
   handlePathErrors,
   handlePsql400Errors,
