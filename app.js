@@ -2,14 +2,20 @@ const express = require("express");
 const app = express();
 app.use(express.json());
 
-const apiRouter = require("./routers/api-router");
+const cors = require("cors");
 
-var cors = require("cors");
-app.use(
-  cors({
-    origin: "https://northnews.netlify.app",
-  })
-);
+const whitelist = ["https://northnews.netlify.app"];
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin || whitelist.indexOf(origin) !== -1) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true,
+};
+app.use(cors(corsOptions));
 
 const {
   handlePathErrors,
@@ -17,6 +23,8 @@ const {
   handleCustomErrors,
   handleServerErrors,
 } = require("./errors/errors");
+
+const apiRouter = require("./routers/api-router");
 
 // handle requests
 app.use("/api", apiRouter);
