@@ -39,4 +39,7 @@ jobs:
         run: npm install
 
       - name: Test with live db
-        run: NODE_ENV=production DATABASE_URL=${{ secrets.DATABASE_URL }} npm t && npm run seed:prod
+        run: NODE_ENV=production DATABASE_URL=${{ secrets.DATABASE_URL }} npm t
+        
+      - name: Seed db with prod data
+        run: DATABASE_URL=${{ secrets.DATABASE_URL }} npm run seed:prod
