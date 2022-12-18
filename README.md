@@ -1,10 +1,10 @@
 # North News API
 
-The api can be accessed at <https://northnews.herokuapp.com/api>.
+The api can be accessed at <https://news-api-emai.onrender.com/api>.
 
 ## Summary
 
-North News API is a RESTful API which stores data in a PSQL database and provides this information to the front end architecture in JSON format.
+North News API is a RESTful API which stores data in a PSQL database and provides this information to the front end in JSON format.
 
 ## Setting up your project
 
@@ -52,6 +52,6 @@ npm test
 
 ## Minimum requirements
 
-Node.js: v16.11.1
+Node.js: `v16.11.1`
 
-Postgres: 14.1
+Postgres: `14.1`
