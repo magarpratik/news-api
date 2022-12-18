@@ -28,8 +28,9 @@ const apiRouter = require("./routers/api-router");
 
 // handle requests
 app.use("/api", apiRouter);
+app.use("/ping", (req, res) => res.send("pong"));
 app.use("/", (req, res) => {
-  res.status(200).send({ msg: "Welcome to North News!" });
+  res.send({ msg: "Welcome to North News!" });
 });
 
 // handle path errors
