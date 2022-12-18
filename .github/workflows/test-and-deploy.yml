@@ -28,16 +28,15 @@ jobs:
       - name: Run tests
         run: PGDATABASE=north_news PGUSER=dev PGPASSWORD=P@55W0RD npm t
 
-  deploy:
+  test-app-live-db:
     runs-on: ubuntu-latest
     needs: test
     steps:
       - name: Checkout Repo
         uses: actions/checkout@v2
 
-      - name: Deploy to Heroku
-        uses: akhileshns/heroku-deploy@v3.12.12
-        with:
-          heroku_api_key: ${{ secrets.HEROKU_API_KEY }}
-          heroku_app_name: ${{ secrets.HEROKU_APP_NAME }}
-          heroku_email: ${{ secrets.HEROKU_EMAIL }}
+      - name: Install dependencies
+        run: npm install
+
+      - name: Test with live db
+        run: NODE_ENV=production DATABASE_URL=${{ secrets.DATABASE_URL }} npm t
