@@ -27,7 +27,7 @@ exports.selectArticles = (sort_by = "created_at", order = "desc", topic) => {
           ) as foo
         ON articles.article_id = foo.article_id`;
 
-    if (["cats", "mitch", "paper"].includes(`${topic}`)) {
+    if (["cooking", "football", "coding"].includes(`${topic}`)) {
       queryStr += ` WHERE topic = '${topic}'`;
     } else if (topic) {
       return Promise.reject({
